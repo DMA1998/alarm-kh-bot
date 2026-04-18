@@ -3,7 +3,7 @@ import os
 from pymongo import MongoClient
 
 
-class Mongo:
+class DB_Client:
 
     def __init__(self):
         self.__hostname: str = os.environ.get('MONGO_HOSTNAME')

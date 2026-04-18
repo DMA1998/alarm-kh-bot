@@ -1,9 +1,10 @@
 from typing import List
-
+from dotenv import load_dotenv
 from telethon import TelegramClient, events
-from Mongo import Mongo
+from mongo.DB_Client import DB_Client
 
-mongo_client = Mongo().get_client()
+load_dotenv()
+mongo_client = DB_Client().get_client()
 db = mongo_client.get_database('telegram')
 
 
