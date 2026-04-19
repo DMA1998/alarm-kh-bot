@@ -3,17 +3,16 @@ import asyncio
 from dotenv import load_dotenv
 from telethon import TelegramClient
 
-from Bot import get_from_info
 from mongo.DB_Client import DB_Client
 from util.Constants import DB
+from util.TelegramMongo import TelegramMongo
 
 load_dotenv()
-mongo_client = DB_Client().get_client()
-db = mongo_client.get_database(DB.DB_NAME)
+tg_mongo = TelegramMongo(DB_Client().get_client())
 
-api_id = get_from_info(DB.API_ID)
-api_hash = get_from_info(DB.API_HASH)
-cell_phone = get_from_info(DB.CELL_PHONE)
+api_id = tg_mongo.get_from_info(DB.API_ID)
+api_hash = tg_mongo.get_from_info(DB.API_HASH)
+cell_phone = tg_mongo.get_from_info(DB.CELL_PHONE)
 
 #TODO change pass
 client = TelegramClient('get_chats_session', api_id, api_hash).start(phone=cell_phone,password='****')
