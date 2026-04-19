@@ -10,6 +10,9 @@ class DB:
     CHANNEL = "channel"
     KEYWORDS = "keywords"
     WORDS = "words"
+    CHAT_NAME = "chat_name"
+    USERNAME = "username"
+    TYPE = "type"
 
 class TgClient:
     USER_CLIENT = 'user'

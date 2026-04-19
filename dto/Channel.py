@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+from util.Constants import DB
 
 @dataclass
 class Channel:
@@ -11,16 +12,16 @@ class Channel:
     @staticmethod
     def from_dict(data: dict) -> "Channel":
         return Channel(
-            chat_name=data.get("chat_name"),
-            chat_id=data.get("chat_id"),
-            username=data.get("username"),
-            type=data.get("type"),
+            chat_name=data.get(DB.CHAT_NAME),
+            chat_id=data.get(DB.CHAT_ID),
+            username=data.get(DB.USERNAME),
+            type=data.get(DB.TYPE),
         )
 
     def to_dict(self) -> dict:
         return {
-            "chat_name": self.chat_name,
-            "chat_id": self.chat_id,
-            "username": self.username,
-            "type": self.type,
+            DB.CHAT_NAME: self.chat_name,
+            DB.CHAT_ID: self.chat_id,
+            DB.USERNAME: self.username,
+            DB.TYPE: self.type,
         }

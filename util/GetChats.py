@@ -24,7 +24,7 @@ async def main():
     async for dialog in client.iter_dialogs():
         entity = dialog.entity
 
-        username = getattr(entity, 'username', None)
+        username = getattr(entity, DB.USERNAME, None)
 
         print(f"Chat Name: {dialog.name}")
         print(f"Chat ID: {dialog.id}")
