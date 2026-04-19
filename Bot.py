@@ -3,6 +3,7 @@ from typing import List
 from dotenv import load_dotenv
 from telethon import TelegramClient, events
 
+from dto.Channel import Channel
 from util.Constants import DB,TgClient
 from mongo.DB_Client import DB_Client
 
@@ -43,9 +44,26 @@ def is_subscriber_exists(chat_id) -> bool:
     search_criteria = {DB.CHAT_ID: chat_id}
     return users_collection.find_one(search_criteria) is not None
 
+def extract_channels() -> List[Channel]:
+    channel_collection = db.get_collection(DB.CHANNEL)
+    documents = channel_collection.find()
+    return [Channel.from_dict(doc) for doc in documents]
+
+def extract_keywords() -> list[str]:
+    keywords_collection = db.get_collection(DB.KEYWORDS)
+
+    document = keywords_collection.find_one({"_id": DB.KEYWORDS})
+
+    if not document or DB.WORDS not in document:
+        raise ValueError("Keywords document not found in DB")
+
+    return [word.lower() for word in document[DB.WORDS]]
+
+
 
 #TODO move to DB and change to chat_id as it more stable and works for private channels as well
-chats = ["@tlknewsua"]
+channels: List[Channel] = extract_channels()
+chat_ids = [channel.chat_id for channel in channels]
 api_id = get_from_info(DB.API_ID)
 api_hash = get_from_info(DB.API_HASH)
 cell_phone = get_from_info(DB.CELL_PHONE)
@@ -87,9 +105,9 @@ if __name__ == "__main__":
 
 
 #TODO move to database
-    keywords = ['активность','активність','летить','летит','на город','ракета','авивация','авіаціїї','загроза','укриття','укрытие','ще одна','еще одна','c300','с-300','выход','вихід','c-300','c300']
+    keywords = extract_keywords()
 
-    @user_client.on(events.NewMessage(chats=chats))
+    @user_client.on(events.NewMessage(chats=chat_ids))
     async def message_handler(event):
         message = event.message.message
 
@@ -99,13 +117,10 @@ if __name__ == "__main__":
 
         if found_keywords:
             #TODO retrieve name by chat id from DB
-            #if(event.chat == None):
-
-            id = event.message.chat_id
-            #sender = '@' + str(event.chat.username)
+            event_chat_id = event.message.chat_id
+            sender = next((c.chat_name for c in channels if c.chat_id == event_chat_id), "Невідомо")
             for chat_id in get_chat_ids():
-                await bot_client.send_message(chat_id, f'{message}\n\n\nДжерело: {id}')
-
+                await bot_client.send_message(chat_id, f'{message}\n❗❗❗😱\nДжерело: {sender}')
 
     print('Bot instance is running')
 

@@ -7,6 +7,9 @@ class DB:
     USERS = 'users'
     INFO = 'info'
     CHAT_ID = "chat_id"
+    CHANNEL = "channel"
+    KEYWORDS = "keywords"
+    WORDS = "words"
 
 class TgClient:
     USER_CLIENT = 'user'
