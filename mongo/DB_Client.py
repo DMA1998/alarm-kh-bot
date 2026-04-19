@@ -1,4 +1,5 @@
 import os
+from multiprocessing import connection
 
 from pymongo import MongoClient
 
@@ -12,5 +13,7 @@ class DB_Client:
         self.__password: str = os.environ.get('MONGO_INITDB_ROOT_PASSWORD')
 
     def get_client(self) -> MongoClient:
-        connection_string = f'mongodb://{self.__username}:{self.__password}@{self.__hostname}:{self.__port}'
+        #connection_string = f'mongodb://{self.__username}:{self.__password}@{self.__hostname}:{self.__port}'
+        print(f'{self.__hostname}')
+        connection_string = f'mongodb://{self.__hostname}:{self.__port}'
         return MongoClient(connection_string)
